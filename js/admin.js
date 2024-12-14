@@ -1,3 +1,4 @@
+// Initialize the admin page with pagination
 export function loadAdmin() {
     console.log('loadAdmin function called');
     const app = document.getElementById('app');
@@ -84,24 +85,34 @@ export function loadAdmin() {
         </div>
     `;
 
+    // Add pagination controls
+    addPaginationControls();
+
     // Initialize listeners
     document.getElementById('add-anime-btn').addEventListener('click', handleAddAnime);
     document.getElementById('update-anime-btn').addEventListener('click', handleUpdateAnime);
     document.getElementById('clear-data-btn').addEventListener('click', clearForm);
 
+    // Fetch initial data
     fetchAnime();
 }
 
 let currentEditId = null; // Track the anime being edited
 
-// Fetch anime from backend
-function fetchAnime() {
-    fetch('http://localhost:8080/api/anime/GetAllAnime')
+let currentPage = 0; // Start with the first page
+const pageSize = 10; // Number of records per page
+let totalPages = 0; // Placeholder for total pages
+
+function fetchAnime(page = 0, size = pageSize) {
+    fetch(`http://localhost:8080/api/anime/GetAllPaginatedAnime?page=${page}&size=${size}`)
         .then(response => response.json())
         .then(data => {
+            totalPages = data.totalPages; // Extract total pages from the backend response
             const tbody = document.getElementById('anime-rows');
             tbody.innerHTML = '';
-            data.forEach(anime => {
+
+            // Populate the table with data from the current page
+            data.content.forEach(anime => {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${anime.id}</td>
@@ -123,15 +134,62 @@ function fetchAnime() {
                 tbody.appendChild(row);
             });
 
-            // Add event listeners for edit and delete buttons
-            document.querySelectorAll('.edit-btn').forEach(btn =>
-                btn.addEventListener('click', () => handleEditAnime(btn.dataset.id))
-            );
-            document.querySelectorAll('.delete-btn').forEach(btn =>
-                btn.addEventListener('click', () => handleDeleteAnime(btn.dataset.id))
-            );
+            // Update pagination controls
+            updatePaginationControls();
+            addEditAndDeleteListeners();
         })
-        .catch(error => console.error('Error fetching anime:', error));
+        .catch(error => console.error('Error fetching paginated anime:', error));
+}
+
+// Function to update pagination controls
+function updatePaginationControls() {
+    const paginationContainer = document.getElementById('pagination-controls');
+    paginationContainer.innerHTML = '';
+
+    const prevButton = document.createElement('button');
+    prevButton.textContent = 'Previous';
+    prevButton.disabled = currentPage === 0;
+    prevButton.onclick = () => {
+        if (currentPage > 0) {
+            currentPage--;
+            fetchAnime(currentPage);
+        }
+    };
+
+    const nextButton = document.createElement('button');
+    nextButton.textContent = 'Next';
+    nextButton.disabled = currentPage >= totalPages - 1;
+    nextButton.onclick = () => {
+        if (currentPage < totalPages - 1) {
+            currentPage++;
+            fetchAnime(currentPage);
+        }
+    };
+
+    paginationContainer.appendChild(prevButton);
+    paginationContainer.appendChild(
+        document.createTextNode(` Page ${currentPage + 1} of ${totalPages} `)
+    );
+    paginationContainer.appendChild(nextButton);
+}
+
+// Helper to add listeners for edit and delete buttons
+function addEditAndDeleteListeners() {
+    document.querySelectorAll('.edit-btn').forEach(btn =>
+        btn.addEventListener('click', () => handleEditAnime(btn.dataset.id))
+    );
+    document.querySelectorAll('.delete-btn').forEach(btn =>
+        btn.addEventListener('click', () => handleDeleteAnime(btn.dataset.id))
+    );
+}
+
+// Add a container for pagination controls
+function addPaginationControls() {
+    const app = document.getElementById('app');
+    const paginationContainer = document.createElement('div');
+    paginationContainer.id = 'pagination-controls';
+    paginationContainer.className = 'mt-4 text-center';
+    app.appendChild(paginationContainer);
 }
 
 // Handle adding new anime

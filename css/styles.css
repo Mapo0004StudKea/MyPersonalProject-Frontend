@@ -48,3 +48,23 @@
     color: white;
     border-bottom: 2px solid #0056b3;
 }
+
+.pagination-controls {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    gap: 10px;
+}
+
+.pagination-controls .page-btn {
+    padding: 5px 10px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+    cursor: pointer;
+}
+
+.pagination-controls .page-btn.active {
+    background-color: #007bff;
+    color: #fff;
+    font-weight: bold;
+}
