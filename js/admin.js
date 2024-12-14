@@ -141,10 +141,20 @@ function fetchAnime(page = 0, size = pageSize) {
         .catch(error => console.error('Error fetching paginated anime:', error));
 }
 
-// Function to update pagination controls
+// Update pagination controls with First, Last, and Search Page
 function updatePaginationControls() {
     const paginationContainer = document.getElementById('pagination-controls');
     paginationContainer.innerHTML = '';
+
+    const firstButton = document.createElement('button');
+    firstButton.textContent = 'First';
+    firstButton.disabled = currentPage === 0;
+    firstButton.onclick = () => {
+        if (currentPage !== 0) {
+            currentPage = 0;
+            fetchAnime(currentPage);
+        }
+    };
 
     const prevButton = document.createElement('button');
     prevButton.textContent = 'Previous';
@@ -166,11 +176,44 @@ function updatePaginationControls() {
         }
     };
 
+    const lastButton = document.createElement('button');
+    lastButton.textContent = 'Last';
+    lastButton.disabled = currentPage >= totalPages - 1;
+    lastButton.onclick = () => {
+        if (currentPage !== totalPages - 1) {
+            currentPage = totalPages - 1;
+            fetchAnime(currentPage);
+        }
+    };
+
+    const pageInput = document.createElement('input');
+    pageInput.type = 'number';
+    pageInput.placeholder = 'Go to Page';
+    pageInput.min = 1;
+    pageInput.max = totalPages;
+    pageInput.style.width = '120px';
+
+    const goToPageButton = document.createElement('button');
+    goToPageButton.textContent = 'Go';
+    goToPageButton.onclick = () => {
+        const page = parseInt(pageInput.value, 10) - 1;
+        if (!isNaN(page) && page >= 0 && page < totalPages) {
+            currentPage = page;
+            fetchAnime(currentPage);
+        } else {
+            alert('Invalid page number');
+        }
+    };
+
+    paginationContainer.appendChild(firstButton);
     paginationContainer.appendChild(prevButton);
     paginationContainer.appendChild(
         document.createTextNode(` Page ${currentPage + 1} of ${totalPages} `)
     );
+    paginationContainer.appendChild(pageInput);
+    paginationContainer.appendChild(goToPageButton);
     paginationContainer.appendChild(nextButton);
+    paginationContainer.appendChild(lastButton);
 }
 
 // Helper to add listeners for edit and delete buttons
