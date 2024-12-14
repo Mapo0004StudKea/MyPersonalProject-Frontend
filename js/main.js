@@ -1,6 +1,7 @@
 // main.js
 
 import { loadHome } from './home.js';
+import { loadAnime } from './anime.js';
 import { loadAdmin } from './admin.js';
 
 
@@ -19,6 +20,9 @@ function navigate() {
     switch (route) {
         case 'home':
             loadHome();
+            break;
+        case 'anime' :
+            loadAnime();
             break;
         case 'admin':
             loadAdmin();
