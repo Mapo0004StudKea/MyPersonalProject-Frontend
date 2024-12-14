@@ -3,11 +3,11 @@ export function loadAnime(page = 0, size = 10) {
 
     const app = document.getElementById('app');
     app.innerHTML = `
-        <h1>Anime Page</h1>
-        <p>Welcome to my list of anime I have watched</p>
+        <h1 class="my-4 text-black">Anime Page</h1>
+        <p class="text-black">Welcome to my list of anime I have watched</p>
         <div class="container mt-5">
-            <table class="table">
-                <thead>
+            <table class="table table-striped table-hover table-bordered border border-success">
+                <thead class="thead-dark .text-warning">
                     <tr id="header-row">
                         <th style="width:22%">Title</th>
                         <th style="width:3%">Link</th>
@@ -22,16 +22,16 @@ export function loadAnime(page = 0, size = 10) {
                 <tbody id="tbl-rows">
                 </tbody>
             </table>
-            <div class="pagination" style="display: flex; justify-content: center; align-items: center; gap: 10px; margin-top: 20px;">
-                <button id="first-page" disabled>First</button>
-                <button id="prev-page" disabled>Previous</button>
-                <span id="current-page">Page ${page + 1}</span>
-                <button id="next-page">Next</button>
-                <button id="last-page">Last</button>
+            <div class="d-flex justify-content-center align-items-center gap-2 mt-4">
+                <button id="first-page" class="btn btn-primary" disabled>First</button>
+                <button id="prev-page" class="btn btn-primary" disabled>Previous</button>
+                <span id="current-page" class="mx-3">Page ${page + 1}</span>
+                <button id="next-page" class="btn btn-primary">Next</button>
+                <button id="last-page" class="btn btn-primary">Last</button>
             </div>
-            <div class="search-page mt-3" style="display: flex; justify-content: center; align-items: center; gap: 10px;">
-                <input type="number" id="page-number-input" min="1" placeholder="Enter page number" style="padding: 5px; text-align: center;"/>
-                <button id="go-to-page">Go to Page</button>
+            <div class="d-flex justify-content-center align-items-center gap-3 mt-3">
+                <input type="number" id="page-number-input" min="1" placeholder="Enter page number" class="form-control w-auto text-center"/>
+                <button id="go-to-page" class="btn btn-primary">Go to Page</button>
             </div>
         </div>
     `;
