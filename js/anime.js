@@ -10,7 +10,6 @@ export function loadAnime(page = 0, size = 10) {
                 <thead class="thead-dark .text-warning">
                     <tr id="header-row">
                         <th style="width:22%">Title</th>
-                        <th style="width:3%">Link</th>
                         <th style="width:15%">Genre</th>
                         <th style="width:9%">Opinion</th>
                         <th style="width:13%">Watch Again?</th>
@@ -53,7 +52,7 @@ export function loadAnime(page = 0, size = 10) {
                 const row = document.createElement('tr');
                 row.innerHTML = `
                     <td>${anime.title}</td>
-                    <td><a href="${anime.link}" target="_blank">Link</a></td>
+                        
                     <td>${anime.genre}</td>
                     <td>${anime.opinion}</td>
                     <td>${anime.watch_again}</td>

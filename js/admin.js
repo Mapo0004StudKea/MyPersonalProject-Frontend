@@ -68,7 +68,7 @@ export function loadAdmin() {
                     <tr>
                         <th>Id</th>
                         <th>Title</th>
-                        <th>Link</th>
+                        
                         <th>Genre</th>
                         <th>Opinion</th>
                         <th>Watch Again?</th>
@@ -117,7 +117,7 @@ function fetchAnime(page = 0, size = pageSize) {
                 row.innerHTML = `
                     <td>${anime.id}</td>
                     <td>${anime.title}</td>
-                    <td>${anime.link}</td>
+                    
                     <td>${anime.genre}</td>
                     <td>${anime.opinion}</td>
                     <td>${anime.watch_again}</td>
@@ -281,7 +281,9 @@ function handleUpdateAnime() {
 
 // Handle deleting anime
 function handleDeleteAnime(id) {
-    fetch(`http://localhost:8080/api/anime/${id}`, { method: 'DELETE' })
+    fetch(`http://localhost:8080/api/anime/${id}`, {
+        method: 'DELETE'
+    })
         .then(response => {
             if (response.ok) {
                 fetchAnime();
